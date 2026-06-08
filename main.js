@@ -1,9 +1,8 @@
 import * as THREE from
 "https://unpkg.com/three@0.160.0/build/three.module.js";
 
-import {generateMaze} from "./maze.js";
-import {encodeSave, decodeSave} from "./save.js";
-import {bfsDistances, findFarthest} from "./maze.js";
+import {generateMaze, bfsDistances, findFarthest}
+from "./maze.js";
 
 let scene, camera, renderer;
 let maze = [];
@@ -31,15 +30,13 @@ function init(){
   document.getElementById("game")
     .appendChild(renderer.domElement);
 
+  // ===== 迷路生成 =====
   maze = generateMaze(size, seed);
-  const startX = 1;
-const startZ = 1;
 
-const dist = bfsDistances(maze, startX, startZ);
+  const dist = bfsDistances(maze, 1, 1);
+  const goal = findFarthest(dist);
 
-const goal = findFarthest(dist);
-
-maze[goal.gz][goal.gx] = 4;
+  maze[goal.gz][goal.gx] = 4;
 
   buildMaze();
 
@@ -53,13 +50,20 @@ maze[goal.gz][goal.gx] = 4;
 
 function buildMaze(){
 
-  const wallMat = new THREE.MeshBasicMaterial({color:0xffffff});
-  const floorMat = new THREE.MeshBasicMaterial({color:0x222222});
+  const wallMat =
+    new THREE.MeshBasicMaterial({color:0xffffff});
 
-  for(let z=0;z<size;z++){
-    for(let x=0;x<size;x++){
+  const floorMat =
+    new THREE.MeshBasicMaterial({color:0x222222});
 
-      if(maze[z][x]===1){
+  const goalMat =
+    new THREE.MeshBasicMaterial({color:0x00ff00});
+
+  for(let z=0; z<size; z++){
+    for(let x=0; x<size; x++){
+
+      // 壁
+      if(maze[z][x] === 1){
 
         const wall =
           new THREE.Mesh(
@@ -69,8 +73,23 @@ function buildMaze(){
 
         wall.position.set(x,1,z);
         scene.add(wall);
+      }
 
-      }else{
+      // ゴール
+      else if(maze[z][x] === 4){
+
+        const goal =
+          new THREE.Mesh(
+            new THREE.BoxGeometry(1,1,1),
+            goalMat
+          );
+
+        goal.position.set(x,0.5,z);
+        scene.add(goal);
+      }
+
+      // 床
+      else{
 
         const floor =
           new THREE.Mesh(
@@ -109,7 +128,8 @@ function updatePlayer(){
   if(keys["a"]) nx -= speed;
   if(keys["d"]) nx += speed;
 
-  if(maze[Math.floor(nz)][Math.floor(nx)]===0){
+  // 壁判定
+  if(maze[Math.floor(nz)][Math.floor(nx)] !== 1){
     player.x = nx;
     player.z = nz;
   }
