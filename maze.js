@@ -150,3 +150,18 @@ export function bfsParents(maze, startX, startZ){
 
   return parent;
 }
+export function buildPath(parent, endX, endZ){
+
+  const path = [];
+  let cur = [endX,endZ];
+
+  while(cur){
+
+    path.push(cur);
+    const [x,z] = cur;
+    cur = parent[z][x];
+
+  }
+
+  return path.reverse();
+}
