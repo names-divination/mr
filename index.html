@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Maze Escape</title>
+
+<style>
+body{
+    margin:0;
+    overflow:hidden;
+    background:#000;
+    color:white;
+    font-family:sans-serif;
+}
+
+#menu{
+    position:absolute;
+    inset:0;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    gap:10px;
+    background:black;
+}
+
+button{
+    padding:12px 20px;
+    font-size:18px;
+    cursor:pointer;
+}
+
+#game{
+    width:100vw;
+    height:100vh;
+}
+</style>
+</head>
+
+<body>
+
+<div id="menu">
+    <h1>Maze Escape</h1>
+
+    <button id="newGame">
+        新規ゲーム
+    </button>
+
+    <button id="loadGame">
+        セーブコード読込
+    </button>
+</div>
+
+<div id="game"></div>
+
+<script type="module" src="./js/main.js"></script>
+
+</body>
+</html>
