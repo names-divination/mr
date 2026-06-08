@@ -32,6 +32,14 @@ function init(){
     .appendChild(renderer.domElement);
 
   maze = generateMaze(size, seed);
+  const startX = 1;
+const startZ = 1;
+
+const dist = bfsDistances(maze, startX, startZ);
+
+const goal = findFarthest(dist);
+
+maze[goal.gz][goal.gx] = 4;
 
   buildMaze();
 
