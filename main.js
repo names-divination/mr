@@ -32,7 +32,41 @@ function init(){
 
   // ===== 迷路生成 =====
   maze = generateMaze(size, seed);
+  import {bfsParents, buildPath} from "./maze.js";
+  const parent = bfsParents(maze, 1, 1);
 
+// 一番遠い場所を探す（簡易：ランダムじゃなく右下寄り）
+let endX = 1;
+let endZ = 1;
+
+for(let z=0; z<size; z++){
+  for(let x=0; x<size; x++){
+    if(maze[z][x] === 0){
+      endX = x;
+      endZ = z;
+    }
+  }
+}
+
+// 経路作成
+const path = buildPath(parent, endX, endZ);
+
+// ルートが短すぎる場合保険
+if(path.length < 10) return;
+
+// 🔥 重要：順番配置
+const keyIndex = Math.floor(path.length * 0.3);
+const doorIndex = Math.floor(path.length * 0.6);
+const goalIndex = path.length - 1;
+
+const [kx, kz] = path[keyIndex];
+const [dx, dz] = path[doorIndex];
+const [gx, gz] = path[goalIndex];
+
+// 置く（レイヤー管理）
+maze[kz][kx] = 2; // key
+maze[dz][dx] = 3; // door
+maze[gz][gx] = 4; // goal
   const dist = bfsDistances(maze, 1, 1);
   const goal = findFarthest(dist);
 
