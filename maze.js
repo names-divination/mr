@@ -105,3 +105,48 @@ export function findFarthest(dist){
 
   return {gx,gz};
 }
+export function bfsParents(maze, startX, startZ){
+
+  const size = maze.length;
+
+  const parent = Array(size)
+    .fill()
+    .map(()=>Array(size).fill(null));
+
+  const visited = Array(size)
+    .fill()
+    .map(()=>Array(size).fill(false));
+
+  const queue = [];
+
+  queue.push([startX,startZ]);
+  visited[startZ][startX] = true;
+
+  const dirs = [[1,0],[-1,0],[0,1],[0,-1]];
+
+  while(queue.length){
+
+    const [x,z] = queue.shift();
+
+    for(const [dx,dz] of dirs){
+
+      const nx = x + dx;
+      const nz = z + dz;
+
+      if(
+        nx>=0 && nz>=0 &&
+        nx<size && nz<size &&
+        maze[nz][nx] === 0 &&
+        !visited[nz][nx]
+      ){
+
+        visited[nz][nx] = true;
+        parent[nz][nx] = [x,z];
+        queue.push([nx,nz]);
+
+      }
+    }
+  }
+
+  return parent;
+}
