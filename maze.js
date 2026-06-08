@@ -85,3 +85,23 @@ export function bfsDistances(maze, startX, startZ){
 
   return dist;
 }
+export function findFarthest(dist){
+
+  let max = -1;
+  let gx = 1;
+  let gz = 1;
+
+  for(let z=0; z<dist.length; z++){
+    for(let x=0; x<dist.length; x++){
+
+      if(dist[z][x] > max){
+        max = dist[z][x];
+        gx = x;
+        gz = z;
+      }
+
+    }
+  }
+
+  return {gx,gz};
+}
