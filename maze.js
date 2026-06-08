@@ -50,3 +50,38 @@ export function generateMaze(size, seed){
 
   return maze;
 }
+export function bfsDistances(maze, startX, startZ){
+  const size = maze.length;
+
+  const dist = Array(size)
+    .fill()
+    .map(()=>Array(size).fill(-1));
+
+  const queue = [];
+
+  queue.push([startX,startZ]);
+  dist[startZ][startX] = 0;
+
+  const dirs = [[1,0],[-1,0],[0,1],[0,-1]];
+
+  while(queue.length){
+    const [x,z] = queue.shift();
+
+    for(const [dx,dz] of dirs){
+      const nx = x + dx;
+      const nz = z + dz;
+
+      if(
+        nx>=0 && nz>=0 &&
+        nx<size && nz<size &&
+        maze[nz][nx] === 0 &&
+        dist[nz][nx] === -1
+      ){
+        dist[nz][nx] = dist[z][x] + 1;
+        queue.push([nx,nz]);
+      }
+    }
+  }
+
+  return dist;
+}
