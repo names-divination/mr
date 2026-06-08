@@ -3,6 +3,7 @@ import * as THREE from
 
 import {generateMaze} from "./maze.js";
 import {encodeSave, decodeSave} from "./save.js";
+import {bfsDistances, findFarthest} from "./maze.js";
 
 let scene, camera, renderer;
 let maze = [];
